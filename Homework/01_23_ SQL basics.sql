@@ -39,7 +39,7 @@ SELECT distinct k_symbol from bank.order;
 
 # Query 9: In the order table, what are the order_ids of the client with the account_id 34?
 SELECT order_id from bank.order
-	where account_id = 34 ;
+	where account_id = 34;
     
 # Query 10: In the order table, which account_ids were responsible for orders between order_id 29540 and order_id 29560 (inclusive)?
 SELECT distinct account_id from bank.order
@@ -81,10 +81,10 @@ select account_id, sum(amount) as Total_loan from bank.loan
 			ORDER BY date DESC; 
             
 	# Query 17
-    select date, duration, count(loan_id) as total_loads from bank.loan
+    select duration, date, count(loan_id) as total_loads from bank.loan
 		where date >= 971201 and date <= 971231 # timestamp is a datetime value in SQL /BETWEEN 971201  AND 971231 
-    group by date, duration
-    ORDER BY date, duration;
+    group by date, duration # '9712%'% can be anything 
+    ORDER BY date, duration; 
     
     # Query 18
     select account_id,type, sum(amount) as total_amount from bank.trans
@@ -99,27 +99,25 @@ select account_id, sum(amount) as Total_loan from bank.loan
         when type = 'VYDAJ' then "Outcoming" 
     end as 'transaction_type'
     from bank.trans
-    where account_id = 396
-    group by type  
-	ORDER BY type; 
+		where account_id = 396
+		group by type  
+		ORDER BY type; 
     
 # Query 20
 select account_id, 
-floor(sum(case when type='PRIJEM' then amount end)) as incoming_amount,
-floor(sum(case when type='VYDAJ' then amount end)) as outcoming_amount,
-floor(sum(case when type='PRIJEM' then amount end)) - floor(sum(case when type='VYDAJ' then amount end))  as difference
+	floor(sum(case when type='PRIJEM' then amount end)) as incoming_amount,
+	floor(sum(case when type='VYDAJ' then amount end)) as outcoming_amount,
+	floor(sum(case when type='PRIJEM' then amount when type='VYDAJ' then - amount end))  as difference
 from bank.trans
-where account_id = 396
-group by account_id;
+	where account_id = 396;
 
 # Query 21
 select account_id, 
-floor(sum(case when type='PRIJEM' then amount end)) - floor(sum(case when type='VYDAJ' then amount end)) 
-as difference
+	floor(sum(case when type='PRIJEM' then amount when type='VYDAJ' then - amount end))  as difference
 from bank.trans
-group by account_id
-order by difference DESC
-limit 10;
+	group by account_id
+	order by difference DESC
+	limit 10;
 
 
     
