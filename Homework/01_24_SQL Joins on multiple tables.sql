@@ -1,27 +1,28 @@
 # 1. Write a query to display for each store its store ID, city, and country.
 select store_id, city, country from store
 join address
-using (address_id)
+	using (address_id)
 join city 
-using(city_id)
+	using(city_id)
 join country
-using(country_id);
+	using(country_id);
 
 #2. Write a query to display how much business, in dollars, each store brought in(customer).
-select store.store_id, sum(payment.amount) as Total_amount from store
+select store.store_id, sum(payment.amount) as Total_amount 
+	from store
 join staff
-using(store_id)
+	using(store_id)
 join payment 
-using(staff_id)
+	using(staff_id)
 group by store.store_id 
 order by sum(payment.amount);
 
 # 3. What is the average running time(length) of films by category?
 select category.name, avg(length) from category
 join film_category
-using(category_id)
+	using(category_id)
 join film
-using(film_id)
+	using(film_id)
 group by category.name
 order by category.name;
 
@@ -38,9 +39,9 @@ limit 5;
 # 5.Display the top 5 most frequently(number of times) rented movies in descending order.
 select title, count(rental_date) from film
 join inventory 
-using(film_id)
+	using(film_id)
 join rental
-using(inventory_id)
+	using(inventory_id)
 group by title
 order by count(rental_date) DESC
 limit 5;
